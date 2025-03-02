@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  docmost:
+    image: docmost/docmost:latest
+    depends_on:
+      - db
+      - redis
+    env_file: 
+      - ./.env
+    environment:
+#      SMTP_DRIVER: ${SMTP_DRIVER}
+#      SMPT_HOST: ${SMTP_HOST}
+#      SMTP_PORT: ${SMTP_PORT}
+#      SMTP_USERNAME: ${SMTP_USERNAME}
+#      SMTP_PASSWORD: ${SMTP_PASSWORD}
+#      SMTP_SECURE: ${SMTP_SECURE}
+#      MAIL_FROM_ADDRESS: ${MAIL_FROM_ADDRESS}
+#      MAIL_FROM_NAME: ${MAIL_FROM_NAME}
+      APP_URL: 'http://localhost:3000'
+      APP_SECRET: 'afb662ac4b2a475e54e44a9acb3eb612afab8a998b62b02fe92214de75045ecb'
+      DATABASE_URL: 'postgresql://docmost:admin@db:5432/docmost?schema=public'
+      REDIS_URL: 'redis://redis:6379'
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    volumes:
+      - docmost:/app/data/storage
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: docmost
+      POSTGRES_USER: docmost
+      POSTGRES_PASSWORD: admin
+    restart: unless-stopped
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7.2-alpine
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+
+volumes:
+  docmost:
+  db_data:
+  redis_data:
+networks:
+  caddy-cloudflare-docker-composer_default:
+    external: true
