@@ -18,7 +18,7 @@ services:
 #      MAIL_FROM_ADDRESS: ${MAIL_FROM_ADDRESS}
 #      MAIL_FROM_NAME: ${MAIL_FROM_NAME}
       APP_URL: 'http://localhost:3000'
-      APP_SECRET: 'afb662ac4b2a475e54e44a9acb3eb612afab8a998b62b02fe92214de75045ecb'
+      APP_SECRET: 'afb662ac4b2a475e54e44a9acb3eb612afab8a998b62b02fe92214de75045ecb' #change me using `openssl rand -hex 32`
       DATABASE_URL: 'postgresql://docmost:admin@db:5432/docmost?schema=public'
       REDIS_URL: 'redis://redis:6379'
     ports:
@@ -48,5 +48,5 @@ volumes:
   db_data:
   redis_data:
 networks:
-  caddy-cloudflare-docker-composer_default:
+  reverse_proxy:
     external: true
